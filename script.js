@@ -1,40 +1,46 @@
-function onClickCell(id) {
-    const cell = document.getElementById(id);
-    if(!cell.innerHTML != ''){
-        cell.innerHTML = 'X';
-        if (!isGameOver()) {
-            const userTurn =  document.querySelector('.user-turn').style.display = "none";
-            const spinner = document.querySelector('.spinner').style.display = "block";
-            setTimeout(() => {
-                computerTurn();
-            }, 1500);
+const allCells = document.getElementsByTagName('td');
+const buttonClear = document.getElementById('button_clear');
+const userTurn = document.querySelector('.user-turn');
+const spinner = document.querySelector('.spinner');
+
+for (const cell of allCells) {
+    cell.addEventListener('click', function(){
+        if(!cell.classList.contains('ocupied')){
+            cell.innerHTML = 'X';
+            cell.classList.add('ocupied');
+            if (!isGameOver()) {
+                userTurn.style.display = "none";
+                spinner.style.display = "block";
+                setTimeout(() => {
+                    computerTurn();
+                }, 1500);
+            }
         }
-    }
+    })
 }
 
-function onClearGame() {
-    for (let i = 1; i < 10; i++) {
-        const cell = document.getElementById(i);
+buttonClear.addEventListener('click', function(){
+    for (const cell of allCells) {
         cell.innerHTML = '';
+        cell.classList.remove('ocupied');
     }
-    turn = 'X';
-}
+})
+
 
 function computerTurn() {
-    for (let i = 1; i < 10; i++) {
-        const cell = document.getElementById(i);
+    for (const cell of allCells) {
         if (cell.innerHTML === '') {
             cell.innerHTML = 'O';
-            const spinner = document.querySelector('.spinner').style.display = "none";
-            const userTurn =  document.querySelector('.user-turn').style.display = "block";
+            cell.classList.add('ocupied');
+            spinner.style.display = "none";
+            userTurn.style.display = "block";
             return;
         }
     }
 }
 
 function isGameOver() {
-    for (let i = 1; i < 10; i++) {
-        const cell = document.getElementById(i);
+    for (const cell of allCells) {
         if (cell.innerHTML === '') {
             return false;
         }
