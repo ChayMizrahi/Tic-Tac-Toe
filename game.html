@@ -1,0 +1,53 @@
+<head>
+
+	<title>Tic Tac Toe</title>
+	<link rel="stylesheet" href="style.css">
+	<meta charset="UTF-8">
+
+
+</head>
+
+<body>
+
+	<h1>Tic Tac Toe</h1>
+
+	<div class="button-wrapper">
+		<input id="button_clear" onclick="onClearGame()" type="button" class="button-clear" value="Clear Game">
+	</div>
+
+	<br><br><br>
+
+	<div class="user-turn">
+		<h3>Your turn</h3>
+	</div>
+
+	<div class="spinner">
+		<div class="double-bounce1"></div>
+		<div class="double-bounce2"></div>
+	</div>
+
+
+	<table id="table_game" class="table-game">
+		<tr>
+			<td id="1" onclick="onClickCell(1)" class="ocupied"></td>
+			<td id="2" onclick="onClickCell(2)" class="ocupied"></td>
+			<td id="3" onclick="onClickCell(3)" class="ocupied"></td>
+		</tr>
+		<tr>
+			<td id="4" onclick="onClickCell(4)" class="ocupied"></td>
+			<td id="5" onclick="onClickCell(5)" class="ocupied"></td>
+			<td id="6" onclick="onClickCell(6)" class="ocupied"></td>
+		</tr>
+		<tr>
+			<td id="7" onclick="onClickCell(7)" class="ocupied"></td>
+			<td id="8" onclick="onClickCell(8)" class="ocupied"></td>
+			<td id="9" onclick="onClickCell(9)" class="ocupied"></td>
+		</tr>
+	</table>
+
+
+	<h2 id="winning_text" class="winning-text" style="display:none">Winning Text</h2>
+
+	<script src="script.js"></script>
+
+</body>
