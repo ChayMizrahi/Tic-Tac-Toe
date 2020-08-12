@@ -4,6 +4,7 @@ function ticTakToeGame() {
     const g_buttonClear = document.getElementById('button_clear');
     const g_userTurn = document.querySelector('.user-turn');
     const g_spinner = document.querySelector('.spinner');
+    const g_winning_text = document.querySelector('#winning_text');
 
     /**
      * Adds the X add the class 'ocupied' to the cilcked cell.
@@ -12,28 +13,37 @@ function ticTakToeGame() {
     function onClickCell(event) {
         const cell = event.target;
         const isOcupied = cell.classList.contains('ocupied');
-        
+
         if (isOcupied)
             return;
-       
+
         cell.innerHTML = 'X';
         cell.classList.add('ocupied');
+
+        if(isWinner('X')){
+            /** add some text */
+            return 
+        }
 
         if (isGameOver())
             return;
 
         toggleUserAndComputerTurn();
-        setTimeout(() => {computerTurn()},1500);
+        setTimeout(() => { computerTurn() }, 1500);
     }
 
     /**
      * Removes the class ocupied and the innerHTML from all cells.
      */
-    function onClickCkearButton() {
+    function onClickClearButton() {
         for (const cell of g_allCells) {
             cell.innerHTML = '';
             cell.classList.remove('ocupied');
         }
+        g_winning_text.innerText="";
+        g_winning_text.style.display = "none";
+        g_userTurn.style.display = "block";
+        
     }
 
     /**
@@ -45,7 +55,39 @@ function ticTakToeGame() {
     }
 
     /**
-     * Checks is the game is over.
+     * Check if sameone win.
+     */
+    function isWinner(player) {
+        const optionsForWins = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+
+        for (let i = 0; i < 8; i++) {
+            const options = optionsForWins[i];
+            if (
+                g_allCells[options[0]].innerHTML == player &&
+                g_allCells[options[1]].innerHTML == player &&
+                g_allCells[options[2]].innerHTML == player
+            ){
+                g_winning_text.innerText= "The winner is "+player;
+                g_winning_text.style.display = "block";
+                g_userTurn.style.display = "none";
+                g_spinner.style.display = "none";
+                return true;
+            }
+        }
+
+    }
+
+    /**
+     * Checks if the game is over.
      */
     function isGameOver() {
         for (const cell of g_allCells) {
@@ -53,6 +95,10 @@ function ticTakToeGame() {
                 return false;
             }
         }
+        g_winning_text.innerText = "There is no winner";
+        g_winning_text.style.display = "block";
+        g_userTurn.style.display = "none";
+        g_spinner.style.display = "none";
         return true;
     }
 
@@ -64,6 +110,8 @@ function ticTakToeGame() {
             if (cell.innerHTML === '') {
                 cell.innerHTML = 'O';
                 cell.classList.add('ocupied');
+                if(isWinner('O'))
+                    return;
                 toggleUserAndComputerTurn();
                 return;
             }
@@ -77,7 +125,7 @@ function ticTakToeGame() {
         for (const cell of g_allCells) {
             cell.addEventListener('click', onClickCell);
         }
-        g_buttonClear.addEventListener('click', onClickCkearButton);
+        g_buttonClear.addEventListener('click', onClickClearButton);
     }
 
     /**
