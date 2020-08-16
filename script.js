@@ -20,9 +20,9 @@ function ticTakToeGame() {
         cell.innerHTML = 'X';
         cell.classList.add('ocupied');
 
-        if(isWinner('X')){
+        if (isWinner('X')) {
             /** add some text */
-            return 
+            return
         }
 
         if (isGameOver())
@@ -40,10 +40,10 @@ function ticTakToeGame() {
             cell.innerHTML = '';
             cell.classList.remove('ocupied');
         }
-        g_winning_text.innerText="";
+        g_winning_text.innerText = "";
         g_winning_text.style.display = "none";
         g_userTurn.style.display = "block";
-        
+
     }
 
     /**
@@ -75,8 +75,9 @@ function ticTakToeGame() {
                 g_allCells[options[0]].innerHTML == player &&
                 g_allCells[options[1]].innerHTML == player &&
                 g_allCells[options[2]].innerHTML == player
-            ){
-                g_winning_text.innerText= "The winner is "+player;
+            ) {
+                let winner = player === 'X'? 'you!': 'the computer :('
+                g_winning_text.innerText = "The winner is " + winner;
                 g_winning_text.style.display = "block";
                 g_userTurn.style.display = "none";
                 g_spinner.style.display = "none";
@@ -95,7 +96,7 @@ function ticTakToeGame() {
                 return false;
             }
         }
-        g_winning_text.innerText = "There is no winner";
+        g_winning_text.innerText = "DRAW";
         g_winning_text.style.display = "block";
         g_userTurn.style.display = "none";
         g_spinner.style.display = "none";
@@ -106,16 +107,116 @@ function ticTakToeGame() {
      * Make the computer turn.
      */
     function computerTurn() {
-        for (const cell of g_allCells) {
-            if (cell.innerHTML === '') {
-                cell.innerHTML = 'O';
-                cell.classList.add('ocupied');
-                if(isWinner('O'))
-                    return;
-                toggleUserAndComputerTurn();
+
+        const optionsForWins = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        /** Try to win */
+        for (let i = 0; i < 8; i++) {
+            const options = optionsForWins[i];
+            const o_1 = g_allCells[options[0]].innerHTML;
+            const o_2 = g_allCells[options[1]].innerHTML;
+            const o_3 = g_allCells[options[2]].innerHTML;
+
+            if (o_1 === 'O' && o_2 === 'O' && o_3 == '') {
+                addComputerSign(g_allCells[options[2]]);
+                return;
+            }
+
+            if (o_2 === 'O' && o_3 === 'O' && o_1 == '') {
+                addComputerSign(g_allCells[options[0]]);
+                return;
+            }
+
+            if (o_3 === 'O' && o_1 === 'O' && o_2 == '') {
+                addComputerSign(g_allCells[options[1]]);
                 return;
             }
         }
+
+        /** Avoid loss */
+        for (let i = 0; i < 8; i++) {
+            const options = optionsForWins[i];
+            const o_1 = g_allCells[options[0]].innerHTML;
+            const o_2 = g_allCells[options[1]].innerHTML;
+            const o_3 = g_allCells[options[2]].innerHTML;
+
+            if (o_1 === 'X' && o_2 === 'X' && o_3 == '') {
+                addComputerSign(g_allCells[options[2]]);
+                return;
+            }
+
+            if (o_2 === 'X' && o_3 === 'X' && o_1 == '') {
+                addComputerSign(g_allCells[options[0]]);
+                return;
+            }
+
+            if (o_3 === 'X' && o_1 === 'X' && o_2 == '') {
+                addComputerSign(g_allCells[options[1]]);
+                return;
+            }
+        }
+
+        /** Increases chances of winning */
+        for (let i = 0; i < 8; i++) {
+            const options = optionsForWins[i];
+            const o_1 = g_allCells[options[0]].innerHTML;
+            const o_2 = g_allCells[options[1]].innerHTML;
+            const o_3 = g_allCells[options[2]].innerHTML;
+
+            if (o_1 === 'O' && o_2 != 'X' && o_3 == '') {
+                addComputerSign(g_allCells[options[2]]);
+                return;
+            }
+
+            if (o_2 === 'O' && o_3 != 'X' && o_1 == '') {
+                addComputerSign(g_allCells[options[0]]);
+                return;
+            }
+
+            if (o_3 === 'O' && o_1 != 'X' && o_2 == '') {
+                addComputerSign(g_allCells[options[1]]);
+                return;
+            }
+        }
+
+        /** Select an initial step */
+        for (let i = 0; i < 8; i++) {
+            const options = optionsForWins[i];
+            const o_1 = g_allCells[options[0]].innerHTML;
+            const o_2 = g_allCells[options[1]].innerHTML;
+            const o_3 = g_allCells[options[2]].innerHTML;
+            if (o_1 === '' && o_2 === '' && o_3 == '') {
+                addComputerSign(g_allCells[options[Math.floor(Math.random() * 3)]]);
+                return;
+            }
+        }
+
+        /** Step does not matter */
+        for (let i = 0; i < 9; i++) {
+            if (g_allCells[i].innerHTML === '') {
+                addComputerSign(g_allCells[i]);
+                return;
+            }
+        }
+    }
+
+    /** Set 'O' on the recived cell */
+    function addComputerSign(cell) {
+        cell.innerHTML = 'O';
+        cell.classList.add('ocupied');
+        if (isWinner('O'))
+            return;
+        toggleUserAndComputerTurn();
+        return;
     }
 
     /**
